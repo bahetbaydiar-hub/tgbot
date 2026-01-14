@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Токен из переменных окружения Koyeb
-TOKEN = os.getenv("7937530249:AAFSa7utF67UhEPtKwA_EYdC2cK6OrHSL1Y")
+TOKEN = os.getenv("TOKEN")
 if not TOKEN:
     logger.error("❌ TOKEN не найден!")
     exit(1)
@@ -44,4 +44,5 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 

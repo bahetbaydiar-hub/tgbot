@@ -4,38 +4,46 @@ import logging
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.enums import ParseMode
+from aiogram.client.default import DefaultBotProperties
 
 # Настройка логов
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Токен из переменных окружения Koyeb
+# Токен из Koyeb Environment variables
 TOKEN = os.getenv("TOKEN")
+
+# Проверка токена
 if not TOKEN:
-    logger.error("❌ TOKEN не найден!")
+    logger.error("❌ ОШИБКА: TOKEN не найден!")
+    logger.error("ℹ️  Добавь в Koyeb Environment variables:")
+    logger.error("    Key: TOKEN")
+    logger.error("    Value: твой_токен_от_BotFather")
     exit(1)
 
-bot = Bot(token=TOKEN, parse_mode=ParseMode.HTML)
+# Инициализация бота с новым синтаксисом
+bot = Bot(
+    token=TOKEN,
+    default=DefaultBotProperties(parse_mode=ParseMode.HTML)  # ← Новый синтаксис!
+)
 dp = Dispatcher()
 
 @dp.message(Command("start"))
 async def start_cmd(message: types.Message):
     await message.answer(
-        "⚡ <b>Музыкальный бот</b>\n\n"
-        "Работает на <b>Koyeb Cloud</b> 24/7!\n\n"
-        "Просто напиши название песни...",
+        "✅ <b>Бот работает на Koyeb!</b>\n\n"
+        "Токен получен успешно!"
     )
 
-@dp.message(Command("status"))
-async def status_cmd(message: types.Message):
-    await message.answer("✅ Бот работает! Хостинг: Koyeb")
-
 @dp.message()
-async def search_music(message: types.Message):
-    await message.answer(f"🔍 Поиск (функция скоро добавится): {message.text}")
+async def echo(message: types.Message):
+    await message.answer(f"Вы написали: <code>{message.text}</code>")
 
 async def main():
-    logger.info("🚀 Запускаю бота на Koyeb...")
+    logger.info("=" * 50)
+    logger.info("🚀 БОТ ЗАПУЩЕН НА KOYEB")
+    logger.info(f"✅ Токен: Установлен")
+    logger.info("=" * 50)
     
     try:
         await dp.start_polling(bot)
@@ -44,5 +52,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-
